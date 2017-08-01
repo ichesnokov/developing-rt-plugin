@@ -1,0 +1,7 @@
+#!/bin/sh
+revealup serve slides.md \
+    --template share/templates/slide.html.mt \
+    --theme simple.css \
+    --transition slide \
+    --width 1024 --height 768
+    #--width 1920 --height 1080
