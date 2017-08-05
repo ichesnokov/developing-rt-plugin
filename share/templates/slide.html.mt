@@ -13,7 +13,7 @@
 ? }else{
     <link rel="stylesheet" href="revealjs/css/theme/black.css" id="theme">
 ? }
-    <link rel="stylesheet" href="revealjs/lib/css/zenburn.css">
+    <link rel="stylesheet" href="css/highlight/idea.css">
     <link rel="stylesheet" href="share/css/slides.css">
     <!-- If the query includes 'print-pdf', use the PDF print sheet -->
     <script>
@@ -55,7 +55,7 @@
           { src: 'revealjs/lib/js/classList.js', condition: function() { return !document.body.classList; } },
           { src: 'revealjs/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
           { src: 'revealjs/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-          //{ src: 'revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
           { src: 'revealjs/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
           { src: 'revealjs/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
         ]
