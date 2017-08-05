@@ -371,14 +371,6 @@ A bit later I'll show you directory layout for the plugin to get static files in
 
 ---
 
----
-
----
-
----
-
----
-
 ## A note on plugin naming
 
 * `RT::Extension::$Something`
@@ -386,6 +378,24 @@ A bit later I'll show you directory layout for the plugin to get static files in
 
 Note:
 I started with RT::Extension as it looks like the recommended naming scheme by Best Practical, but got completely annoyed by constantly typing it every time (maybe I should improve my Vim-fu) - `RTx` is so much shorter.
+---
+### Makefile.PL
+
+```perl
+use inc::Module::Install;
+
+# Define module name and directories to install
+RTx 'RTx-FillTicketData'; # Module::Install::RTx
+requires_rt('4.0.0');
+
+# Abstract, author, version, license, Perl version
+all_from('lib/RTx/FillTicketData.pm');
+no_index 'etc';
+
+# Write out META.yml and Makefile
+WriteAll();
+```
+
 ---
 
 ## Sources of information
@@ -404,6 +414,6 @@ I started with RT::Extension as it looks like the recommended naming scheme by B
 <br/>
 <br/>
 <p style="font-size: xx-large;">
-Ilya Chesnokov &lt;<a href="mailto:chesnokov.ilya@gmail.com">chesnokov.ilya@gmail.com</a>&gt;<br/><br/>
-TPC::EU Amsterdam, 2017
+Ilya Chesnokov, <a href="mailto:chesnokov@cpan.org">chesnokov@cpan.org</a><br/><br/>
+TPC::EU, Amsterdam, 2017
 </p>
