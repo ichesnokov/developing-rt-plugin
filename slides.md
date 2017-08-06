@@ -26,7 +26,7 @@ This was The book that made me know about issue tracking software.
 Software it mentioned was Request Tracker - ticketing system by Best Practical solutions.
 ---
 
-## Request Tracker (or RT)
+## Request Tracker (RT)
 
 * Open-source request tracking system
 * Free for any use
@@ -41,7 +41,7 @@ But then times changed and I've become a Perl programmer and forgot about RT for
 
 ---
 
-## RT is a ticket system
+## What BPS says about RT
 
 RT is a battle-tested issue tracking system which thousands of organizations use for bug tracking, help desk ticketing, customer service, workflow processes, change management, network operations, youth counselling and even more. 
 
@@ -78,6 +78,40 @@ We can assign a *right* to access some *queue* to certain *users* or *groups*.
 
 ---
 
+## RT architecture overview
+
+### Built with HTML::Mason
+
+* Mason's various pieces revolve around the notion of "components"
+* A component is a mix of HTML, Perl, and special Mason commands, one component per file
+* Mason's component syntax lets designers separate a web page into programmatic and design elements
+
+Note:
+Mason is such a PHP, but you can write in Perl inside of it ;)
+---
+
+## RT plugin architecture
+
+* It is a CPAN module with its own Makefile.PL etc
+    * Module::Install::RTx
+* Can have *custom libs* / *scripts* / *components* / *static files* / *configuration*
+
+---
+
+## A note on plugin naming
+
+* `RT::Extension::$Something`
+* `RTx::$Something`
+
+Note:
+I started with RT::Extension as it looks like the recommended naming scheme by Best Practical, but got completely annoyed by constantly typing it every time (maybe I should improve my Vim-fu) - `RTx` is so much shorter.
+
+---
+
+# Real-world task
+
+---
+
 ## Let's imagine we're at ISP's call center
 
 * Stuff accepts calls, creates tickets and fills CFs with user's information:
@@ -101,7 +135,7 @@ Every queue has its own set of associated CFs.
 
 ---
 
-## Some of CFs are "ID" fields
+## Some of CFs are "Key" fields
 
 * **Contract №**, Phone №, First and last name of the user
 * **Switch port №**, IP address, bandwidth
@@ -118,25 +152,29 @@ Call center specialists don't have a time to fill some of that stuff I mentioned
 
 ## How?
 
-* Add *"Get data"* button near every *ID field*, which, when pressed, takes value from *ID field* and fills other CFs with relevant data.
-* Make it possible to configure *ID fields* and *data sources*
+* Add *"Get data"* button near every *Key field*, which, when pressed, takes value from *Key field* and fills other CFs with relevant data.
+* *Key fields* and *data sources* should be configurable
 
 ---
 
 ## Development plan
 
-* Display "Get data" button after each of "ID fields"
-* Provide API endpoint which:
-  * Accepts value of ID field
-  * Reads data from preconfigured sources (database, external command output, predefined text)
-  * Returns values for *Subject*, *Body* and *non-ID Custom Fields*
-* Bind a JavaScript code to "Get data" button, which:
-  * Sends value of ID field to the backend
+* Configure *Key fields* and data sources
+* Display *Get data* button after every *Key field*
+* Bind JavaScript code to *Get data* button, which sends request to *API endpoint*
+* Provide *API endpoint* which queries external data
+
+Note:
+JavaScript code:
+  * Sends value of *Key field* to *API endpoint*
   * Accepts returned values and populates the appropriate fields
+API endpoint:
+  * Finds value of the relevant *Key field*
+  * Reads data from preconfigured sources (database, external command output, predefined text)
+  * Returns values for *Subject*, *Body* and *non-key Custom Fields*
 
 ---
 
-## Step 0:
 ## Configuration file format
 
 Note:
@@ -144,7 +182,7 @@ We need a configuration for our plugin to:
 * Identify key fields
 * Specify data sources
 
-Configuration will be in JSON format.
+I've chosen JSON as a configuration format.
 
 ---
 
@@ -233,21 +271,13 @@ Configuration will be in JSON format.
 
 ---
 
-## Step 1. Adding a button
-
----
-
-## RT is built with HTML::Mason
-
-* Mason's various pieces revolve around the notion of "components"
-* A component is a mix of HTML, Perl, and special Mason commands, one component per file
-* Mason's component syntax lets designers separate a web page into programmatic and design elements
+# Adding a button
 
 Note:
-Mason is such a PHP, but you can write in Perl inside of it ;)
+To understand how to add a button we need to look at source code of RT.
 ---
 
-## Components
+## Have a look at Components
 
 ```pre
 ./Ticket/Graphs:
@@ -264,7 +294,7 @@ ActiveTickets CreateTicket ExtraInfo InactiveTickets
 ```
 
 Note:
-It might look attractive to find a component which renders Custom Fields and edit it to include the "Get data" button after each of the Key Field according to config. But please DON'T. You don't want to ship your changed files to your customers, you **can't** ship them to the outside world.
+It might look tempting to find a component which renders Custom Fields and edit it to include the "Get data" button after each of the Key Field according to config. But please DON'T. You don't want to ship your changed files to your customers, you **can't** ship them to the outside world.
 
 ---
 
@@ -340,8 +370,6 @@ RT->AddJavaScript('RTx-FillTicketData.js');
 # RT->AddStyleSheets('...');
 ```
 
-Note:
-A bit later I'll show you directory layout for the plugin to get static files installed properly.
 ---
 
 ## API endpoint
@@ -363,22 +391,9 @@ A bit later I'll show you directory layout for the plugin to get static files in
     $r->content_type('application/json');
 </%init>
 ```
----
 
 ---
 
----
-
----
-
-## A note on plugin naming
-
-* `RT::Extension::$Something`
-* `RTx::$Something`
-
-Note:
-I started with RT::Extension as it looks like the recommended naming scheme by Best Practical, but got completely annoyed by constantly typing it every time (maybe I should improve my Vim-fu) - `RTx` is so much shorter.
----
 ### Makefile.PL
 
 ```perl
@@ -398,10 +413,30 @@ WriteAll();
 
 ---
 
+
+## Installation
+
+```pre
+perl Makefile.PL RTHOME=/opt/rt4
+make
+make test
+make install
+```
+
+---
+
+## What we learned
+
+* General RT architecture / plugins overview
+* Built a plugin that uses: *Custom components*, *Callbacks*, *Static files*
+* How to solve a real-world task using Perl-based product
+
+---
+
 ## Sources of information
 
 * https://bestpractical.com/resources/ - links to various resources including *perldoc for RT*, *forum*, *blog*, *wiki*, and *user guides*.
-* Source code of RT itself and its plugins (e.g. [https://metacpan.org/pod/RTx::FillTicketData](https://metacpan.org/pod/RTx::FillTicketData))
+* Source code of RT itself and its plugins (e.g. https://metacpan.org/pod/RTx::FillTicketData)
 
 ---
 
