@@ -5,7 +5,7 @@
 
 ---
 
-## Internet is a magical sphere...
+## Internet is like a magical sphere...
 
 ---
 
@@ -429,7 +429,7 @@ make install
 
 * General RT architecture / plugins overview
 * Built a plugin that uses: *Custom components*, *Callbacks*, *Static files*
-* How to solve a real-world task using Perl-based product
+* How to solve a real-world task by writing plugin for RT
 
 ---
 
