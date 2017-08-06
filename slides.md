@@ -1,6 +1,4 @@
-# Developing
-# RT  plugin
-# for fun and profit
+# Developing RT plugin for fun and profit
 ## (mostly for profit) <!-- .element: class="fragment" data-fragment-index="1" -->
 
 ---
@@ -78,9 +76,7 @@ We can assign a *right* to access some *queue* to certain *users* or *groups*.
 
 ---
 
-## RT architecture overview
-
-### Built with HTML::Mason
+## Built using HTML::Mason
 
 * Mason's various pieces revolve around the notion of "components"
 * A component is a mix of HTML, Perl, and special Mason commands, one component per file
@@ -90,15 +86,15 @@ Note:
 Mason is such a PHP, but you can write in Perl inside of it ;)
 ---
 
-## RT plugin architecture
+## RT plugins are CPAN modules
 
-* It is a CPAN module with its own Makefile.PL etc
-    * Module::Install::RTx
-* Can have *custom libs* / *scripts* / *components* / *static files* / *configuration*
+* Can have custom *modules* / *scripts* / *components* / *static files*
+* Distributed similar to other Perl modules
+    * Module::Install + Module::Install::RTx
 
 ---
 
-## A note on plugin naming
+## Choosing plugin name
 
 * `RT::Extension::$Something`
 * `RTx::$Something`
@@ -271,7 +267,7 @@ I've chosen JSON as a configuration format.
 
 ---
 
-# Adding a button
+## Adding a button
 
 Note:
 To understand how to add a button we need to look at source code of RT.
