@@ -48,7 +48,7 @@ Lots of information.
 
 ---
 
-## Ticket?
+## What is a Ticket?
 
 Note:
 Ticket in some trouble ticket software, like RT.
@@ -161,10 +161,10 @@ That was the first thing I did!
 
 ---
 
-## We can't ship it anywhere
+## We'll have problems with shipping
 
 Note:
-You can't simply 
+You can't simply ...
 ---
 
 ## What we can do?
@@ -185,15 +185,8 @@ There is a lot of callbacks inside of RT code.
 `<path-to-component>/<ClbckName>`
 
 ---
-## Path for Callback from Plugin
 
-`local/plugins/<plugin-name>/`<br>
-`html/Callbacks/`<br>
-`<plugin-name>/`<br>
-`<path-to-component>/<ClbckName>`
----
-
-## Callback we need
+## Component we need
 
 
 ```pre
@@ -211,7 +204,7 @@ $m->callback(
 ## "Get data" button
 
 ```pre
-# html/Callbacks/RTx-FillTicketData/Elements/EditCustomFields/AfterCustomFieldValue
+# .../Elements/EditCustomFields/AfterCustomFieldValue
 
 % my $config = RTx::FillTicketData::config();
 % if ($CustomField
@@ -227,11 +220,45 @@ $m->callback(
 
 ---
 
-## But what that button does?
+## And what's the best way to ship it?
 
 ---
 
-## Runs some JavaScript code
+## Creating a plugin!
+
+---
+## But how to call it?
+
+---
+`RT::Extension::$Thing`
+
+---
+
+or
+
+---
+
+`RTx::$Thing`
+
+---
+
+`RTx::FillTicketData`
+
+---
+## Path for Callback from Plugin
+
+`local/plugins/<plugin-name>/`<br>
+`html/Callbacks/`<br>
+`<plugin-name>/`<br>
+`<path-to-component>/<ClbckName>`
+
+---
+
+## What our button is going to do?
+
+---
+
+## Run some JavaScript code
 
 ---
 
@@ -251,7 +278,7 @@ $m->callback(
 ```
 
 Note:
-So we can essentially gather these values and send them to the backend, identifying the "Key" one
+So we can essentially gather these fields' values and send them to the backend, identifying the "Key" one
 
 ---
 
@@ -296,7 +323,6 @@ RT->AddJavaScript('RTx-FillTicketData.js');
 
 Note:
 `.../local/plugins/<plugin-name>...`
-
 ---
 
 ## But how does the backend know where to get data from?
@@ -395,26 +421,51 @@ These are the fields after which the button gets added.
 
 ---
 
-## What we have
-
-* *Get data* button
-* *JavaScript* it invokes
-* *API endpoint* to return data to us
-* *Configuration file*
+## But how to load that configuration?
 
 ---
 
-<img style="border: 0; height: 80%; width: 80%;" src="../img/happy-woman.jpg"/>
 
+## How not to hardcode a path to configuration JSON file?
+
+---
+
+```pre
+# /path-to-rt/etc/RT_SiteConfig.pm
+
+Set(
+    $FillTicketDataSettingsFile =>
+    '/home/ichesnokov/rt/etc/fill_ticket_data_settings.json'
+);
+```
+
+---
+
+```pre
+# .../lib/RTx/FillTicketData.pm
+
+sub find_config_file {
+    RT->Config->Get('FillTicketDataSettingsFile');
+}
+
+```
 Note:
-Bingo!
+Exploring internals of RT module itself can be really useful.
+---
+
+## What we have
+
+* *Get data* button callback
+* *JavaScript* it invokes
+* *API endpoint* component
+* *Configuration file*
 ---
 
 ## Proceed to packaging?
 
 ---
 
-## RT plugins are CPAN modules!
+## RT plugins can be CPAN distributions
 
 Note:
 * Can have custom *modules* / *scripts* / *components* / *static files*
@@ -454,22 +505,34 @@ make install
 
 ---
 
-## What we learned?
+## Switching it on
+
+```
+# /path-to-rt/etc/RT_SiteConfig.pm
+Plugin('RTx::FillTicketData');
+```
 
 ---
 
-## Brief RT overview
+## What we achieved?
+
+---
+
+## Brief overview of RT concepts
 
 ---
 
 ## Built a simple plugin
 
 ---
-## Made a woman happy!
+
+## Made call center specialists happier!
 
 ---
+<img style="border: 0; height: 80%; width: 80%;" src="../img/happy-woman.jpg"/>
 
-<img style="border: 0; height: 100%; width: 100%;" src="../img/happy-woman-2.jpg"/>
+Note:
+Bingo!
 
 ---
 ## Sources of information
