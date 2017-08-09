@@ -1,5 +1,5 @@
 #!/bin/sh
-revealup serve slides.md \
+revealup serve slides-2.0.md \
     --template share/templates/slide.html.mt \
     --theme simple.css \
     --transition none \
