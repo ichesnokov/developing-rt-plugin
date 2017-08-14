@@ -11,7 +11,8 @@
 
 ---
 
-## A user having a problem calls...
+## A user having a problem
+## calls us...
 
 Note:
 The first thing they ask is...
@@ -93,7 +94,13 @@ Are they the organizations we care about?
 
 ---
 
-## Tickets, Queues, Custom Fields
+## Tickets
+---
+
+## Queues
+
+---
+## Custom Fields
 
 Note:
 *Ticket* can be created in a *Queue*. Each *Queue* can have its own set of associated *CFs*. Custom fields can be created on their own.
@@ -176,16 +183,6 @@ You can't simply ...
 Note:
 There is a lot of callbacks inside of RT code.
 ---
-
-## Path to Callback
-
-`local/`<br>
-`html/Callbacks/`<br>
-`<anything>/`<br>
-`<path-to-component>/<ClbckName>`
-
----
-
 ## Component we need
 
 
@@ -198,6 +195,16 @@ $m->callback(
     ...
 );
 ```
+
+---
+
+
+## Path to Callback
+
+`local/`<br>
+`html/Callbacks/`<br>
+`<anything>/`<br>
+`<path-to-component>/<ClbckName>`
 
 ---
 
@@ -224,10 +231,10 @@ $m->callback(
 
 ---
 
-## Creating a plugin!
+## Create a plugin!
 
 ---
-## But how to call it?
+## But what name to give it?
 
 ---
 `RT::Extension::$Thing`
@@ -251,6 +258,10 @@ or
 `html/Callbacks/`<br>
 `<plugin-name>/`<br>
 `<path-to-component>/<ClbckName>`
+
+---
+
+## Button added
 
 ---
 
@@ -287,8 +298,11 @@ So we can essentially gather these fields' values and send them to the backend, 
 ---
 
 
-## But how do we add JavaScript to the plugin?
+## But how to load JavaScript on the page?
 
+Note:
+No, not via a callback.
+Page needs to know which additional JavaScript files to load.
 ---
 
 ```pre
@@ -303,7 +317,7 @@ RT->AddJavaScript('RTx-FillTicketData.js');
 
 ---
 
-## But we still need an API endpoint, don't we?
+## But we still need API endpoint, don't we?
 
 ---
 
@@ -411,7 +425,7 @@ These are the fields after which the button gets added.
 {
     "Body": [
         { "command": "/bin/cat /home/rt/__CONTRACT_ID__" },
-        { "Text": "Hello, user #__CONTRACT_ID__!" }
+        { "Text": "Sincerely yours," }
     ],
     "Subject": [
         { "command": "/bin/get_subject __CONTRACT_ID__" }
@@ -426,12 +440,12 @@ These are the fields after which the button gets added.
 ---
 
 
-## How not to hardcode a path to configuration JSON file?
+## Can we hardcode a path to the JSON file?
 
 ---
 
-```pre
-# /path-to-rt/etc/RT_SiteConfig.pm
+```
+# ...path-to-rt/etc/RT_SiteConfig.pm
 
 Set(
     $FillTicketDataSettingsFile =>
@@ -508,7 +522,8 @@ make install
 ## Switching it on
 
 ```
-# /path-to-rt/etc/RT_SiteConfig.pm
+# ...path-to-rt/etc/RT_SiteConfig.pm
+
 Plugin('RTx::FillTicketData');
 ```
 
